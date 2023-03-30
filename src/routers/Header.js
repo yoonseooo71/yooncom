@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import styleComponents from "../assets/styles/StyleComponents";
 import { Outlet } from "react-router-dom";
-import PostAdd from "./PostAdd";
-import PopUser from "./PopUser";
 import { useEffect, useState } from "react";
-import firebase, { getFireStore, db } from "../firebase/config";
 import { Link, useNavigate } from "react-router-dom";
+import firebase, { db } from "../firebase/config";
+import styleComponents from "../assets/styles/StyleComponents";
+import PostAdd from "../components/PostAdd";
+import PopUser from "../components/PopUser";
 function Header() {
   const navigate = useNavigate();
   const [isPostAdd, setIsPostAdd] = useState(false); //글추가창 state
@@ -22,8 +22,10 @@ function Header() {
   }, []);
   const getUserInfo = async (userId) => {
     //user uid가지고 데이터베이스에서 정보가져와서 state에 저장
-    const doc = await getFireStore("user", userId);
-    setUserLoginInfo({ ...doc.data() });
+    db.collection("user").doc(userId).get()
+      .then((doc)=>setUserLoginInfo({ ...doc.data() }))
+      .catch((error)=>console.log("error:",error))
+    
   };
   const loginEvent = () => {//구글로그인 함수
     const provider = new firebase.auth.GoogleAuthProvider();

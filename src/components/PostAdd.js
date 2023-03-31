@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import {setFireStore} from "../firebase/config";
+import {db} from "../firebase/config";
 function PostAdd({ toglePostAddHandler,userName }) {
   const [postInfo, setPostInfo] = useState({
     title: "",
@@ -19,8 +19,9 @@ function PostAdd({ toglePostAddHandler,userName }) {
   }
   async function setPosts(e) { //firebase 데이더 추가 함수 
     if (postInfo.text !== "" && postInfo.title !== "" && postInfo.user !== "") {
-      const childDoc = await setFireStore('posts',null,postInfo) ; //전체 문서에 추가 
-      setFireStore('user',localStorage.getItem('userId'),postInfo,'myPosts',childDoc.id);//유저 개인문서 보관에 저장 
+      db.collection("posts").add(postInfo)//전체 문서에 추가 
+        .then((Doc)=>db.collection("user").doc(localStorage.getItem("userId")).collection("myPosts").doc(Doc).set(postInfo))
+        .catch((error)=>console.error("error",error))
       toglePostAddHandler(e);
     }
   }

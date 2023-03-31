@@ -39,28 +39,4 @@ export const getFireStore = async (colName,docName,order=null,childColName=null,
   }
 };
 
-export async function setFireStore(colName,docName,data,childColName=null,childDocName=null) { //데이터 저장함수
-  try {
-    if(childDocName){ //문서 안의 컬렉션안의 문서 이름정할때 
-      db.collection(colName).doc(docName).collection(childColName).doc(childDocName).set(data);
-    }else  if (childColName) {//문서안의 컬렉션안의 문서이름 자동으로 (자동으로 정한 문서이름 반환)
-      return db.collection(colName).doc(docName).collection(childColName).add(data);
-    }else if (docName) {//문서이름 정함
-      db.collection(colName).doc(docName).set(data);
-    } else { //문서이름 자동 (자동으로 정한 문서이름 반환)
-      return db.collection(colName).add(data);
-    } 
-  } catch (error) {
-    console.log("error:", error);
-  }
-}
-
-export async function removeFirStore(docName,childDocName){
-  try {
-    db.collection("posts").doc(childDocName).delete();
-    db.collection("user").doc(docName).collection("myPosts").doc(childDocName).delete();
-  } catch(error) {
-    console.log("error:",error)
-  }
-}
 export default firebase;

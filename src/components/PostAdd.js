@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import {db} from "../firebase/config";
-function PostAdd({ toglePostAddHandler,userName }) {
+function PostAdd({ toglePostAddHandler,userName,addPostInfo }) {
   const [postInfo, setPostInfo] = useState({
     title: "",
     text: "",
@@ -20,8 +20,10 @@ function PostAdd({ toglePostAddHandler,userName }) {
   async function setPosts(e) { //firebase 데이더 추가 함수 
     if (postInfo.text !== "" && postInfo.title !== "" && postInfo.user !== "") {
       db.collection("posts").add(postInfo)//전체 문서에 추가 
-        .then((Doc)=>db.collection("user").doc(localStorage.getItem("userId")).collection("myPosts").doc(Doc).set(postInfo))
+        .then((doc)=>{
+          db.collection("user").doc(localStorage.getItem("userId")).collection("myPosts").doc(doc.id).set(postInfo)})
         .catch((error)=>console.error("error",error))
+      addPostInfo(postInfo);//PostList에 데이터 추가 
       toglePostAddHandler(e);
     }
   }

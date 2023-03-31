@@ -31,6 +31,7 @@ function LoginPost({ id, title, user, text, isDel = null }) {
           .doc(id)
           .delete()
       )
+      .then(()=>window.location.reload()) //창새로고침
       .catch((error) => console.error("error:", error));
   };
   const addBookMarkEvent =  () => { //유저컬렉션에 북마크 포스트 추가 

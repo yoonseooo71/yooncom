@@ -9,6 +9,7 @@ import PopUser from "../components/PopUser";
 function Header() {
   const navigate = useNavigate();
   const [isPostAdd, setIsPostAdd] = useState(false); //글추가창 state
+  const [addPostInfo,setAddPostInfo] = useState(undefined); //새로운 포스트 추가 값 전달 state
   const [isPopUser, setIsPopUser] = useState(false); //유저 팝업창 state
   const [userLoginInfo, setUserLoginInfo] = useState({}); //유저 정보 state
   const [isLogin, setIsLogin] = useState(localStorage.getItem("isLogin")); //로컬스토리지에 로그인이 되었있는지 확인
@@ -64,6 +65,7 @@ function Header() {
         <PostAdd
           toglePostAddHandler={() => setIsPostAdd(!isPostAdd)}
           userName={userLoginInfo.name}
+          addPostInfo={setAddPostInfo}
         />
       )}
       <HeaderContainer>
@@ -96,7 +98,7 @@ function Header() {
         )}
       </HeaderContainer>
       <Line />
-      <Outlet context={{isLogin}}/>
+      <Outlet context={{isLogin,addPostInfo,setAddPostInfo}}/>
     </>
   );
 }

@@ -71,8 +71,8 @@ function Header() {
       <HeaderContainer>
         <Title>yooncom</Title>
         <NavContainer>
-          <Link to="/"><Nav>최근추가된</Nav></Link>
-          <Link to="/like"><Nav>인기있는</Nav></Link>
+          <Link to="/"><Nav>최신</Nav></Link>
+          <Link to="/like"><Nav>트렌드</Nav></Link>
           {isLogin && (
             <Nav onMouseDown={() => setIsPostAdd(!isPostAdd)}>글쓰기</Nav>
           )}

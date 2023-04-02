@@ -2,6 +2,12 @@ import {createGlobalStyle} from 'styled-components'
 import reset from 'styled-reset';
 const GlobalStyle = createGlobalStyle`
   ${reset}
+  @font-face {
+    font-family: 'BMJUA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
   * {
     box-sizing: border-box;
   }
@@ -9,6 +15,7 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-family: 'BMJUA';
   }
   a {
     text-decoration:none;

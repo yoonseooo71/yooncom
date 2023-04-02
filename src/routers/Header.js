@@ -110,7 +110,6 @@ const HeaderContainer = styled.header`
   padding: 0 70px 0 70px;
 `;
 const Title = styled(styleComponents.CenterContainer)`
-  font-weight: 700;
   font-size: 64px;
 `;
 const NavContainer = styled.div`
@@ -120,7 +119,6 @@ const NavContainer = styled.div`
 `;
 const Nav = styled(Title)`
   flex-basis: auto;
-  font-weight: 700;
   font-size: 36px;
   margin: 0 20px 0 20px;
   cursor: pointer;

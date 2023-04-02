@@ -8,17 +8,31 @@ import trashcanIcon from "../assets/images/trashcanIcon.svg";
 import { db } from "../firebase/config";
 function LoginPost({ id, title, user, text, isDel = null }) {
   const [isBook, setIsBook] = useState(false);
-  const [isLike,setIsLike] = useState(false); 
-  useEffect(()=>{ // 유저가 북마크 해논거 표시하기 위해 값 비교해봄
-    db.collection("user").doc(localStorage.getItem("userId")).collection("bookMark").doc(id).get()
-    .then((doc)=>{if (doc.data() && doc.data().isBook) setIsBook(true)})
-    .catch((error) => console.error("error:", error));
-    
-    db.collection("user").doc(localStorage.getItem("userId")).collection("like").doc(id).get()
-    .then((doc)=>{if (doc.data() && doc.data().isLike) setIsLike(true)})
-    .catch((error) => console.error("error:", error));
-  },[])
-  const removePostEvent = () => {//포스트 아예 삭제
+  const [isLike, setIsLike] = useState(false);
+  useEffect(() => {
+    // 유저가 북마크 해논거 표시하기 위해 값 비교해봄
+    db.collection("user")
+      .doc(localStorage.getItem("userId"))
+      .collection("bookMark")
+      .doc(id)
+      .get()
+      .then((doc) => {
+        if (doc.data() && doc.data().isBook) setIsBook(true);
+      })
+      .catch((error) => console.error("error:", error));
+
+    db.collection("user")
+      .doc(localStorage.getItem("userId"))
+      .collection("like")
+      .doc(id)
+      .get()
+      .then((doc) => {
+        if (doc.data() && doc.data().isLike) setIsLike(true);
+      })
+      .catch((error) => console.error("error:", error));
+  }, []);
+  const removePostEvent = () => {
+    //포스트 아예 삭제
     //포스트 지우기 이벤트
     db.collection("posts")
       .doc(id)
@@ -31,10 +45,11 @@ function LoginPost({ id, title, user, text, isDel = null }) {
           .doc(id)
           .delete()
       )
-      .then(()=>window.location.reload()) //창새로고침
+      .then(() => window.location.reload()) //창새로고침
       .catch((error) => console.error("error:", error));
   };
-  const addBookMarkEvent =  () => { //유저컬렉션에 북마크 포스트 추가 
+  const addBookMarkEvent = () => {
+    //유저컬렉션에 북마크 포스트 추가
     setIsBook(!isBook);
     db.collection("posts")
       .doc(id)
@@ -44,66 +59,88 @@ function LoginPost({ id, title, user, text, isDel = null }) {
           .doc(localStorage.getItem("userId"))
           .collection("bookMark")
           .doc(id)
-          .set({...doc.data(),isBook : true});
+          .set({ ...doc.data(), isBook: true });
       })
       .catch((error) => console.error("error:", error));
   };
-  const removeBookMarkEvent = () => { //유저컬렉션에서 북마크 포스트 제거
+  const removeBookMarkEvent = () => {
+    //유저컬렉션에서 북마크 포스트 제거
     setIsBook(!isBook);
-    db.collection("user").doc(localStorage.getItem("userId")).collection("bookMark").doc(id).delete()
-    .catch((error) => console.error("error:", error));
+    db.collection("user")
+      .doc(localStorage.getItem("userId"))
+      .collection("bookMark")
+      .doc(id)
+      .delete()
+      .catch((error) => console.error("error:", error));
   };
   const addLikeEvent = () => {
-    setIsLike(!isLike); 
-    db.collection("user").doc(localStorage.getItem("userId")).collection("like").doc(id).set({isLike : true})
+    setIsLike(!isLike);
+    db.collection("user")
+      .doc(localStorage.getItem("userId"))
+      .collection("like")
+      .doc(id)
+      .set({ isLike: true })
       .catch((error) => console.error("error:", error));
-    db.collection("posts").doc(id).get()
-      .then((doc)=>{
-        const data = doc.data() ; 
-        data.like += 1 ;  
-        db.collection("posts").doc(id).set(data); 
+    db.collection("posts")
+      .doc(id)
+      .get()
+      .then((doc) => {
+        const data = doc.data();
+        data.like += 1;
+        db.collection("posts").doc(id).set(data);
       })
       .catch((error) => console.error("error:", error));
-    
-  }
-  const removeLikeEvent= ()=>{
-    setIsLike(!isLike); 
-    db.collection("user").doc(localStorage.getItem("userId")).collection("like").doc(id).delete()
+  };
+  const removeLikeEvent = () => {
+    setIsLike(!isLike);
+    db.collection("user")
+      .doc(localStorage.getItem("userId"))
+      .collection("like")
+      .doc(id)
+      .delete()
       .catch((error) => console.error("error:", error));
-    db.collection("posts").doc(id).get()
-      .then((doc)=>{
-        const data = doc.data() ; 
-        data.like -= 1 ;  
-        db.collection("posts").doc(id).set(data); 
+    db.collection("posts")
+      .doc(id)
+      .get()
+      .then((doc) => {
+        const data = doc.data();
+        data.like -= 1;
+        db.collection("posts").doc(id).set(data);
       })
       .catch((error) => console.error("error:", error));
-    
-  }
+  };
   return (
     <>
       <Container>
-        <TitleBox>
-          <Title>{title}</Title>
-          <User>{user}</User>
-        </TitleBox>
+        <Title>{title}</Title>
         <TextBox>{text}</TextBox>
-        <div id="logobox">
-          {
-            isDel && (
-              <Logo
-                src={trashcanIcon}
-                onMouseDown={removePostEvent}
-                postId={id}
-              />
-            ) /* 본인 포스트에서 삭제버튼 띄우기 */
-          }
-          {!isLike ? <Logo src={likeIcon} onMouseDown={addLikeEvent} /> : <Logo src={likeIconFill} onMouseDown={removeLikeEvent}/>}
-          
-          {!isBook ? (
-            <Logo src={bookmarkIcon} onMouseDown={addBookMarkEvent} />
-          ) : (
-            <Logo src={bookmarkIconFill} onMouseDown={removeBookMarkEvent} />
-          )}
+        <div id="box">
+          <User>
+            <span>by </span>
+            {user}
+          </User>
+          <LogoBox id="logobox" isDel={isDel}>
+            {
+              isDel && (
+                <Logo
+                  src={trashcanIcon}
+                  onMouseDown={removePostEvent}
+                  postId={id}
+                />
+              ) /* 본인 포스트에서 삭제버튼 띄우기 */
+            }
+            {!isLike ? (
+              <Logo src={likeIcon} onMouseDown={addLikeEvent} />
+            ) : (
+              <Logo src={likeIconFill} onMouseDown={removeLikeEvent} />
+            )}
+
+            {!isBook ? (
+              <Logo src={bookmarkIcon} onMouseDown={addBookMarkEvent} />
+            ) : (
+              <Logo src={bookmarkIconFill} onMouseDown={removeBookMarkEvent} />
+            )}
+          </LogoBox>
         </div>
       </Container>
     </>
@@ -113,42 +150,39 @@ const Container = styled.div`
   width: 350px;
   height: 250px;
   padding: 20px;
-  border-radius: 20px;
+  border-radius: 5px;
   background-color: #d9d9d9;
   display: flex;
   flex-direction: column;
   margin: 0 30px 30px 30px;
-  #logobox {
-    align-self: flex-end;
+  #box {
+    display: flex;
+    justify-content: space-between;
   }
 `;
-const TitleBox = styled.div`
-  width: 100%;
-  height: 35px;
+const LogoBox = styled.div`
+  width: ${({ isDel }) => (isDel ? "30%" : "20%")};
   display: flex;
   justify-content: space-between;
+  align-self: flex-end;
 `;
 const Title = styled.h2`
-  width: 200px;
-  font-weight: 700;
-  font-size: 24px;
+  width: 100%;
+  font-size: 28px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 const User = styled.div`
-  width: 100px;
-  font-weight: 700;
-  font-size: 15px;
-  align-self: flex-end;
+  width: 70%;
+  font-size: 18px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-align: end;
 `;
 const TextBox = styled.div`
   width: 100%;
-  height: 120px;
+  height: 130px;
   margin-top: 17px;
   font-weight: 700;
   font-size: 16px;
@@ -156,7 +190,7 @@ const TextBox = styled.div`
   overflow: hidden;
 `;
 const Logo = styled.img`
-  width: 40px;
+  width: 30px;
 `;
 
 export default LoginPost;

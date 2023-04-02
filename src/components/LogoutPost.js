@@ -1,27 +1,22 @@
 import styled from "styled-components";
 import bookmarkIcon from "../assets/images/bookmarkIcon.svg";
 import likeIcon from "../assets/images/likeIcon.svg";
-import trashcanIcon from "../assets/images/trashcanIcon.svg";
 function LogoutPost({ id, title, user, text, isDel = null }) {
+  const alertLogin = ()=>alert("로그인을 하셔야 이용하실수있습니다.");
   return (
     <>
       <Container>
-        <TitleBox>
-          <Title>{title}</Title>
-          <User>{user}</User>
-        </TitleBox>
+        <Title>{title}</Title>
         <TextBox>{text}</TextBox>
-        <div id="logobox">
-          {
-            isDel && (
-              <Logo
-                src={trashcanIcon}
-                postId={id}
-              />
-            ) /* 본인 포스트에서 삭제버튼 띄우기 */
-          }
-          <Logo src={likeIcon}/>
-          <Logo src={bookmarkIcon}  />
+        <div id="box">
+          <User>
+            <span>by </span>
+            {user}
+          </User>
+          <LogoBox id="logobox">
+            <Logo src={likeIcon} onMouseDown={alertLogin}/>
+            <Logo src={bookmarkIcon} onMouseDown={alertLogin}/>
+          </LogoBox>
         </div>
       </Container>
     </>
@@ -31,42 +26,39 @@ const Container = styled.div`
   width: 350px;
   height: 250px;
   padding: 20px;
-  border-radius: 20px;
+  border-radius: 5px;
   background-color: #d9d9d9;
   display: flex;
   flex-direction: column;
   margin: 0 30px 30px 30px;
-  #logobox {
-    align-self: flex-end;
+  #box {
+    display: flex;
+    justify-content: space-between;
   }
 `;
-const TitleBox = styled.div`
-  width: 100%;
-  height: 35px;
+const LogoBox = styled.div`
+  width: ${({ isDel }) => (isDel ? "30%" : "20%")};
   display: flex;
   justify-content: space-between;
+  align-self: flex-end;
 `;
 const Title = styled.h2`
-  width: 200px;
-  font-weight: 700;
-  font-size: 24px;
+  width: 100%;
+  font-size: 28px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 const User = styled.div`
-  width: 100px;
-  font-weight: 700;
-  font-size: 15px;
-  align-self: flex-end;
+  width: 70%;
+  font-size: 18px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-align: end;
 `;
 const TextBox = styled.div`
   width: 100%;
-  height: 120px;
+  height: 130px;
   margin-top: 17px;
   font-weight: 700;
   font-size: 16px;
@@ -74,7 +66,6 @@ const TextBox = styled.div`
   overflow: hidden;
 `;
 const Logo = styled.img`
-  width: 40px;
+  width: 30px;
 `;
-
 export default LogoutPost;

@@ -9,7 +9,7 @@ import PopUser from "../components/PopUser";
 function Header() {
   const navigate = useNavigate();
   const [isPostAdd, setIsPostAdd] = useState(false); //글추가창 state
-  const [addPostInfo,setAddPostInfo] = useState(undefined); //새로운 포스트 추가 값 전달 state
+  const [addPostInfo, setAddPostInfo] = useState(undefined); //새로운 포스트 추가 값 전달 state
   const [isPopUser, setIsPopUser] = useState(false); //유저 팝업창 state
   const [userLoginInfo, setUserLoginInfo] = useState({}); //유저 정보 state
   const [isLogin, setIsLogin] = useState(localStorage.getItem("isLogin")); //로컬스토리지에 로그인이 되었있는지 확인
@@ -23,12 +23,14 @@ function Header() {
   }, []);
   const getUserInfo = async (userId) => {
     //user uid가지고 데이터베이스에서 정보가져와서 state에 저장
-    db.collection("user").doc(userId).get()
-      .then((doc)=>setUserLoginInfo({ ...doc.data() }))
-      .catch((error)=>console.log("error:",error))
-    
+    db.collection("user")
+      .doc(userId)
+      .get()
+      .then((doc) => setUserLoginInfo({ ...doc.data() }))
+      .catch((error) => console.log("error:", error));
   };
-  const loginEvent = () => {//구글로그인 함수
+  const loginEvent = () => {
+    //구글로그인 함수
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase
       .auth()
@@ -40,12 +42,14 @@ function Header() {
           photoURL: user.photoURL,
           email: user.email,
         };
-        db.collection("user").doc(user.uid).set(info)
-          .then(()=>{
+        db.collection("user")
+          .doc(user.uid)
+          .set(info)
+          .then(() => {
             localStorage.setItem("isLogin", true); //로컬스토리지에 로그인 현황 저장
             localStorage.setItem("userId", user.uid); //로컬스토리지에 유저 아이디 저장
           })
-          .then(()=>window.location.reload())  //창 새로고침 새로고침할떄 데이터가 다전송된디에 보내야함
+          .then(() => window.location.reload()) //창 새로고침 새로고침할떄 데이터가 다전송된디에 보내야함
           .catch((error) => console.error(error));
       })
       .catch((error) => {
@@ -56,7 +60,7 @@ function Header() {
     //로그아웃 함수
     localStorage.removeItem("isLogin");
     localStorage.removeItem("userId");
-    navigate("/"); //로그아웃할때 홈으로 이동 그이유는 로그인전에 이동못하는 창이있기때문 
+    navigate("/"); //로그아웃할때 홈으로 이동 그이유는 로그인전에 이동못하는 창이있기때문
     window.location.reload(); //창 새로고침
   };
   return (
@@ -71,8 +75,12 @@ function Header() {
       <HeaderContainer>
         <Title>yooncom</Title>
         <NavContainer>
-          <Link to="/"><Nav>최신</Nav></Link>
-          <Link to="/like"><Nav>트렌드</Nav></Link>
+          <Link to="/">
+            <Nav>최신</Nav>
+          </Link>
+          <Link to="/like">
+            <Nav>트렌드</Nav>
+          </Link>
           {isLogin && (
             <Nav onMouseDown={() => setIsPostAdd(!isPostAdd)}>글쓰기</Nav>
           )}
@@ -98,13 +106,13 @@ function Header() {
         )}
       </HeaderContainer>
       <Line />
-      <Outlet context={{isLogin,addPostInfo,setAddPostInfo}}/>
+      {!isPostAdd && <Outlet context={{ isLogin, addPostInfo, setAddPostInfo }} />}
     </>
   );
 }
 
 const HeaderContainer = styled.header`
-  width: 100vw;
+  width: 100%;
   height: 100px;
   display: flex;
   padding: 0 70px 0 70px;
@@ -132,7 +140,7 @@ const Login = styled(Nav)`
 const Line = styled.div`
   width: 98%;
   border: 2px black solid;
-  margin: 29px 0 29px ;
+  margin: 29px 0 29px;
 `;
 const UserImg = styled.img`
   width: 80px;

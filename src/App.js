@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter,Route, Routes} from 'react-router-dom'
 import Header from './routers/Header';
 import PostList from './routers/PostList';
-import {getRecent,getLike,getBookMark,getMy} from './modules/getFunction';
+import {getRecent,getLike,getBookMark,getMy} from './libs/getFunction';
 function App() {
   return (
     <React.StrictMode>

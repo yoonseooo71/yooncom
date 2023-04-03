@@ -1,7 +1,7 @@
 import {LoginPost,LogoutPost} from "../components/Post";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import styleComponents from "../assets/styles/StyleComponents";
+import styled from "styled-components";
 function PostList({getFunc,isDel=null}) { 
   const {isLogin,addPostInfo,setAddPostInfo} = useOutletContext();
   const [postList, setPostList] = useState([]);
@@ -16,16 +16,21 @@ function PostList({getFunc,isDel=null}) {
   },[addPostInfo])
   return (
     <>
-        <styleComponents.PostList>
+        <PostListContainer>
           {postList.map((i,key) => {
             if(isLogin === true) return <LoginPost key={key} {...i} isDel={isDel}/> //로그인됬을때는 기능이 추간된 포스트
             else return <LogoutPost key={key} {...i}/> //로그인 안됬을때는 기능이 없는 포스트 
           })}
-        </styleComponents.PostList>
+        </PostListContainer>
     </>
   );
 }
-
+const PostListContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+`;
 
 
 export default PostList;

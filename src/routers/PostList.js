@@ -1,6 +1,6 @@
 import {LoginPost,LogoutPost} from "../components/Post";
 import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext} from "react-router-dom";
 import styled from "styled-components";
 function PostList({getFunc,isDel=null}) { 
   const {isLogin,addPostInfo,setAddPostInfo} = useOutletContext();

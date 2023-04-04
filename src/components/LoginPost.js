@@ -6,7 +6,9 @@ import likeIcon from "../assets/images/likeIcon.svg";
 import likeIconFill from "../assets/images/likeIcon-fill.svg";
 import trashcanIcon from "../assets/images/trashcanIcon.svg";
 import { db } from "../firebase/config";
+import { useNavigate } from "react-router-dom";
 function LoginPost({ id, title, user, text, isDel = null }) {
+  const navigate = useNavigate() ; 
   const [isBook, setIsBook] = useState(false);
   const [isLike, setIsLike] = useState(false);
   useEffect(() => {
@@ -109,9 +111,12 @@ function LoginPost({ id, title, user, text, isDel = null }) {
       })
       .catch((error) => console.error("error:", error));
   };
+  const goPostInfo = (id) => {
+    navigate(`/post/${id}`)
+  }
   return (
     <>
-      <Container>
+      <Container onMouseDown={()=>goPostInfo(id)}> 
         <Title>{title}</Title>
         <TextBox>{text}</TextBox>
         <div id="box">

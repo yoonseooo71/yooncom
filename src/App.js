@@ -2,6 +2,7 @@ import React from 'react';
 import {BrowserRouter,Route, Routes} from 'react-router-dom'
 import Header from './routers/Header';
 import PostList from './routers/PostList';
+import PostInfo from './routers/PostInfo';
 import {getRecent,getLike,getBookMark,getMy} from './libs/getFunction';
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
             <Route  path='/myposts' element={<PostList getFunc={getMy} isDel={true} key="my"/>}/>
             <Route  path='/bookmark' element={<PostList getFunc={getBookMark} key="bookmark"/>}/>
             <Route  path='/like' element={<PostList getFunc={getLike} key="like"/>}/>
+            <Route path='/post/:id' element={<PostInfo/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

@@ -13,7 +13,6 @@ function PostInfo() {
       .then((res) => setPostData(res.data()))
       .catch((error) => console.error("error:", error));
   }, []);
-  console.log(postData);
   return (
     <>
       {postData &&

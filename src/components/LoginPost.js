@@ -33,9 +33,10 @@ function LoginPost({ id, title, user, text, isDel = null }) {
       })
       .catch((error) => console.error("error:", error));
   }, []);
-  const removePostEvent = () => {
+  const removePostEvent = (e) => {
     //포스트 아예 삭제
     //포스트 지우기 이벤트
+    e.stopPropagation();
     db.collection("posts")
       .doc(id)
       .delete()
@@ -50,8 +51,9 @@ function LoginPost({ id, title, user, text, isDel = null }) {
       .then(() => window.location.reload()) //창새로고침
       .catch((error) => console.error("error:", error));
   };
-  const addBookMarkEvent = () => {
+  const addBookMarkEvent = (e) => {
     //유저컬렉션에 북마크 포스트 추가
+    e.stopPropagation();
     setIsBook(!isBook);
     db.collection("posts")
       .doc(id)
@@ -65,8 +67,9 @@ function LoginPost({ id, title, user, text, isDel = null }) {
       })
       .catch((error) => console.error("error:", error));
   };
-  const removeBookMarkEvent = () => {
+  const removeBookMarkEvent = (e) => {
     //유저컬렉션에서 북마크 포스트 제거
+    e.stopPropagation();
     setIsBook(!isBook);
     db.collection("user")
       .doc(localStorage.getItem("userId"))
@@ -75,7 +78,8 @@ function LoginPost({ id, title, user, text, isDel = null }) {
       .delete()
       .catch((error) => console.error("error:", error));
   };
-  const addLikeEvent = () => {
+  const addLikeEvent = (e) => {
+    e.stopPropagation();
     setIsLike(!isLike);
     db.collection("user")
       .doc(localStorage.getItem("userId"))
@@ -93,7 +97,8 @@ function LoginPost({ id, title, user, text, isDel = null }) {
       })
       .catch((error) => console.error("error:", error));
   };
-  const removeLikeEvent = () => {
+  const removeLikeEvent = (e) => {
+    e.stopPropagation();
     setIsLike(!isLike);
     db.collection("user")
       .doc(localStorage.getItem("userId"))
@@ -111,17 +116,16 @@ function LoginPost({ id, title, user, text, isDel = null }) {
       })
       .catch((error) => console.error("error:", error));
   };
-  const goPostInfo = (e) => {
-    if (e.target !== e.currentTarget) return;
+  const goPostInfo = () => {
     navigate(`/post/${id}`)
   }
   return (
     <>
       <Container onMouseDown={goPostInfo}> 
-        <Title onMouseDown={goPostInfo}>{title}</Title>
-        <TextBox onMouseDown={goPostInfo}>{text}</TextBox>
+        <Title>{title}</Title>
+        <TextBox>{text}</TextBox>
         <div id="box">
-          <User onMouseDown={goPostInfo}>
+          <User>
             <span>by </span>
             {user}
           </User>

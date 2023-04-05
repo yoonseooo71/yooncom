@@ -111,16 +111,17 @@ function LoginPost({ id, title, user, text, isDel = null }) {
       })
       .catch((error) => console.error("error:", error));
   };
-  const goPostInfo = (id) => {
+  const goPostInfo = (e) => {
+    if (e.target !== e.currentTarget) return;
     navigate(`/post/${id}`)
   }
   return (
     <>
-      <Container onMouseDown={()=>goPostInfo(id)}> 
-        <Title>{title}</Title>
-        <TextBox>{text}</TextBox>
+      <Container onMouseDown={goPostInfo}> 
+        <Title onMouseDown={goPostInfo}>{title}</Title>
+        <TextBox onMouseDown={goPostInfo}>{text}</TextBox>
         <div id="box">
-          <User>
+          <User onMouseDown={goPostInfo}>
             <span>by </span>
             {user}
           </User>

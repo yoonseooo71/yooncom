@@ -36,7 +36,7 @@ function LoginPost({ id, title, user, text, isDel = null }) {
   const removePostEvent = (e) => {
     //포스트 아예 삭제
     //포스트 지우기 이벤트
-    e.stopPropagation();
+    e.stopPropagation(); //부모 이벤트 버블링 방지(이벤트 겹치는것)
     db.collection("posts")
       .doc(id)
       .delete()
